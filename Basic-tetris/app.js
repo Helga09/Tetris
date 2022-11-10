@@ -7,6 +7,13 @@ document.addEventListener('DOMContentLoaded', () => {
     let nextRandom = 0;
     let timerId;
     let score = 0;
+    const colors = [
+        'orange',
+        'red',
+        'purple',
+        'green',
+        'blue'
+    ];
 
     // The Tetrominoes
     const lTetromino = [
@@ -57,6 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function draw() {
         current.forEach(index => {
             squares[currentPosition + index].classList.add('tetromino');
+            squares[currentPosition + index].style.backgroundColor = colors[random];
         })
     }
 
@@ -64,11 +72,9 @@ document.addEventListener('DOMContentLoaded', () => {
     function undrow() {
         current.forEach(index => {
             squares[currentPosition + index].classList.remove('tetromino');
+            squares[currentPosition + index].style.backgroundColor = '';
         })
     }
-
-    // make the tetromino move down every second
-    // timerId = setInterval(moveDown, 1000);
 
     // assign functions to keyCodes
     function control(e) {
@@ -154,7 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
     //show up-next tetromino in mini-grid
     const displaySquares = document.querySelectorAll('.mini-grid div');
     const displayWidth = 4;
-    let displayIndex = 0;
+    const displayIndex = 0;
 
     // the Tetrominos without rotations
     const upNextTetrominoes = [
@@ -169,9 +175,11 @@ document.addEventListener('DOMContentLoaded', () => {
     function displayShape() {
         displaySquares.forEach(squares => {
             squares.classList.remove('tetromino');
+            squares.style.backgroundColor = '';
         })
         upNextTetrominoes[nextRandom].forEach(index => {
             displaySquares[displayIndex + index].classList.add('tetromino');
+            displaySquares[displayIndex + index].style.backgroundColor = colors[nextRandom];
         });
     }
 
@@ -200,6 +208,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 row.forEach(index => {
                     squares[index].classList.remove('taken');
                     squares[index].classList.remove('tetromino');
+                    squares[index].style.backgroundColor = '';
                 })
                 const squaresRemoved = squares.splice(i, width);
                 squares = squaresRemoved.concat(squares);
@@ -210,7 +219,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // game over
     function gameOver() {
-        if(current.some(index => squares[currentPosition+index].classList.contains('taken'))){
+        if (current.some(index => squares[currentPosition + index].classList.contains('taken'))) {
             scoreDisplay.innerHTML = 'end';
             clearInterval(timerId);
         }
