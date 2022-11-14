@@ -188,13 +188,20 @@ document.addEventListener('DOMContentLoaded', () => {
         if (timerId) {
             clearInterval(timerId);
             timerId = null;
+            document.querySelector('audio').pause();
+            startBtn.style.backgroundColor="green";
+            startBtn.innerHTML = 'Грати';
         }
         else {
+            document.querySelector('audio').play();
             draw();
             timerId = setInterval(moveDown, 1000);
             nextRandom = Math.floor(Math.random() * theTetrominoes.length);
             displayShape();
+            startBtn.style.backgroundColor="red";
+            startBtn.innerHTML = 'Пауза';
         }
+       
     });
 
     // add score
@@ -220,8 +227,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // game over
     function gameOver() {
         if (current.some(index => squares[currentPosition + index].classList.contains('taken'))) {
-            scoreDisplay.innerHTML = 'end';
+            scoreDisplay.innerHTML = 'кінець';
             clearInterval(timerId);
+            document.querySelector('audio').pause();
         }
     }
 

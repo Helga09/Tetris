@@ -1,12 +1,45 @@
+body{
+    background: linear-gradient(21deg, #dd03e4, #5611ec);
+}
+header {
+    display: flex;
+    justify-content: center;
+}
+
+h1 {
+    text-align: center;
+    font-family: 'Righteous', cursive;
+    position: relative;
+    color: #fcf526;
+    display: inline-block;
+    border-top: 2px solid;
+    border-bottom: 2px solid;
+    font-size: 3em;
+    padding: 11px 60px;
+    margin: 0;
+    line-height: 1;
+    margin: 1%;
+}
+
+h2{
+    text-align: center;
+    font-family: 'Righteous', cursive;
+    position: relative;
+    color: #fcf526;
+}
+
 .container {
-display: flex;
-} 
+    display: flex;
+    justify-content: center;
+}
+
 .grid {
     width: 200px;
     height: 400px;
     display: flex;
     flex-wrap: wrap;
     background-color: yellow;
+    box-shadow: 0 3px #999;
 }
 
 .grid div {
@@ -30,4 +63,34 @@ display: flex;
 .mini-grid div {
     height: 20px;
     width: 20px;
+}
+
+.button {
+    display: inline-block;
+    padding: 15px 25px;
+    font-size: 24px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    color: white;
+    font-family: 'Righteous', cursive;
+    background-color: green;
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 2px #999;
+}
+
+
+audio{
+    visibility: hidden;
+}
+.game{
+    display: block;
+  
+}
+.display{
+    margin: 1%;
+    display: flex;
+    justify-content: center;
 }
