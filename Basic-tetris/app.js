@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+    showRules();
     const grid = document.querySelector('.grid');
     let squares = Array.from(document.querySelectorAll('.grid div'));
     const scoreDisplay = document.querySelector('#score');
@@ -14,6 +15,8 @@ document.addEventListener('DOMContentLoaded', () => {
         'green',
         'blue'
     ];
+
+    document.getElementById('rules').addEventListener('click',showRules);
 
     // The Tetrominoes
     const lTetromino = [
@@ -182,14 +185,14 @@ document.addEventListener('DOMContentLoaded', () => {
             displaySquares[displayIndex + index].style.backgroundColor = colors[nextRandom];
         });
     }
-
+    
     // add funcrionality to the button
     startBtn.addEventListener('click', () => {
         if (timerId) {
             clearInterval(timerId);
             timerId = null;
             document.querySelector('audio').pause();
-            startBtn.style.backgroundColor="green";
+            startBtn.style.backgroundColor = "green";
             startBtn.innerHTML = 'Грати';
         }
         else {
@@ -198,10 +201,10 @@ document.addEventListener('DOMContentLoaded', () => {
             timerId = setInterval(moveDown, 1000);
             nextRandom = Math.floor(Math.random() * theTetrominoes.length);
             displayShape();
-            startBtn.style.backgroundColor="red";
+            startBtn.style.backgroundColor = "red";
             startBtn.innerHTML = 'Пауза';
         }
-       
+
     });
 
     // add score
@@ -231,6 +234,20 @@ document.addEventListener('DOMContentLoaded', () => {
             clearInterval(timerId);
             document.querySelector('audio').pause();
         }
+    }
+
+    function showRules(){
+        Swal.fire({
+            title: '<strong><u>Правила гри</u></strong>',
+            icon: 'info',
+            html:
+                'Для обертання  фігур використовується клавіша<img style="  width: 40px;height: 40px;" src="https://cdn-icons-png.flaticon.com/512/31/31838.png"><br>' +
+                'Для переміщення фігур по гральному полю використовуються клавіші<img style="  width: 40px;height: 40px;" src="https://cdn-icons-png.flaticon.com/512/31/31931.png"> для зміщення фігури вліво та' +
+                '<img style="  width: 40px;height: 40px;" src="https://cdn-icons-png.flaticon.com/512/30/30997.png"> для зміщення фігури вправо',
+            showCloseButton: true,
+            showCancelButton: true,
+            focusConfirm: false
+        })
     }
 
 })
