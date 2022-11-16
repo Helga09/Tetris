@@ -12,15 +12,20 @@
 
 <body>
     <div class="rules"></div>
-    <img  id="rules" style="  width: 40px; height: 40px;" src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Lol_question_mark.png/800px-Lol_question_mark.png">
+    <img id="rules" style="  width: 40px; height: 40px;"
+        src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Lol_question_mark.png/800px-Lol_question_mark.png">
     </div>
 
     <header>
-               <h1>Гра в тетріс </h1>
+        <h1>Гра в тетріс </h1>
     </header>
     <div class="game">
         <h2>Бали:<span id="score">0</span></h2>
-          <div class="container">
+        <div class="slidecontainer">
+          <label>Швидкість руху фігур:</label>
+            <input type="range" min="300" max="1500" value="1000" class="slider" id="speed">
+        </div>
+        <div class="container">
 
             <div class="grid">
                 <div></div>
@@ -253,7 +258,7 @@
                 <div></div>
                 <div></div>
             </div>
-            
+
 
 
         </div>
@@ -261,10 +266,12 @@
             <button class="button" id="start-button">Грати</button>
         </div>
     </div>
+        <footer>
+        <p>Сайт створено за <a href="https://www.youtube.com/watch?v=rAUn1Lom6dw">цим відео</a></p>
+    </footer>
     <audio controls autoplay loop>
         <source src="music.mp3" type="audio/ogg">
     </audio>
-    <footer></footer>
 </body>
 
 </html>

@@ -4,8 +4,10 @@ document.addEventListener('DOMContentLoaded', () => {
     let squares = Array.from(document.querySelectorAll('.grid div'));
     const scoreDisplay = document.querySelector('#score');
     const startBtn = document.querySelector("#start-button");
+    var slider = document.getElementById("speed");
     const width = 10;
     let nextRandom = 0;
+    let currentRotation = 0;
     let timerId;
     let score = 0;
     const colors = [
@@ -16,7 +18,8 @@ document.addEventListener('DOMContentLoaded', () => {
         'blue'
     ];
 
-    document.getElementById('rules').addEventListener('click',showRules);
+    document.getElementById('rules').addEventListener('click', showRules);
+
 
     // The Tetrominoes
     const lTetromino = [
@@ -29,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const zTetromino = [
         [0, width, width + 1, width * 2 + 1],
         [width + 1, width + 2, width * 2, width * 2 + 1],
-        [0, width, width + 1, width * 2 + 1]
+        [0, width, width + 1, width * 2 + 1],
         [width + 1, width + 2, width * 2, width * 2 + 1]
     ];
 
@@ -57,7 +60,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const theTetrominoes = [lTetromino, zTetromino, tTetromino, oTetromino, iTetromino];
 
     let currentPosition = 4;
-    let currentRotation = 0;
 
     // randomly select a Tetromino and its first rotation
     let random = Math.floor(Math.random() * theTetrominoes.length);
@@ -79,22 +81,38 @@ document.addEventListener('DOMContentLoaded', () => {
         })
     }
 
+
     // assign functions to keyCodes
     function control(e) {
+
         if (e.keyCode === 37) {
             moveLeft();
         }
         else if (e.keyCode === 38) {
-            rotate();
+            if (timerId) {
+                rotate();
+            }
         }
         else if (e.keyCode === 39) {
             moveRigth();
         }
         else if (e.keyCode === 40) {
-            moveDown();
+            if (timerId) {
+                moveDown();
+            }
         }
     }
-    document.addEventListener('keyup', control);
+    document.addEventListener('keydown', control);
+
+    var arrow_keys_handler = function (e) {
+        switch (e.code) {
+            case "ArrowUp": case "ArrowDown": case "ArrowLeft": case "ArrowRight":
+            case "Space": e.preventDefault(); break;
+            default: break; // do not block other keys
+        }
+    };
+
+
 
     // move down function
     function moveDown() {
@@ -119,6 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
             gameOver();
         }
     }
+    freeze();
 
     // move the tetromino left, unless is at the edge or there is a blocage
     function moveLeft() {
@@ -152,7 +171,8 @@ document.addEventListener('DOMContentLoaded', () => {
     function rotate() {
         undrow();
         currentRotation++;
-        if (currentRotation === current.length) { //if current rotation gets to 4, make it go to 0
+
+        if (currentRotation === current.length) {
             currentRotation = 0;
         }
 
@@ -185,10 +205,22 @@ document.addEventListener('DOMContentLoaded', () => {
             displaySquares[displayIndex + index].style.backgroundColor = colors[nextRandom];
         });
     }
-    
+
+
+
     // add funcrionality to the button
-    startBtn.addEventListener('click', () => {
+    startBtn.addEventListener('click', startGame);
+
+    slider.oninput = function () {
         if (timerId) {
+            clearInterval(timerId);
+            timerId = setInterval(moveDown, this.value);
+        }
+    }
+
+    function startGame() {
+        if (timerId) {
+            window.removeEventListener("keydown", arrow_keys_handler, false);
             clearInterval(timerId);
             timerId = null;
             document.querySelector('audio').pause();
@@ -196,16 +228,17 @@ document.addEventListener('DOMContentLoaded', () => {
             startBtn.innerHTML = 'Грати';
         }
         else {
+            window.addEventListener("keydown", arrow_keys_handler, false);
             document.querySelector('audio').play();
             draw();
-            timerId = setInterval(moveDown, 1000);
+            timerId = setInterval(moveDown, slider.value);
             nextRandom = Math.floor(Math.random() * theTetrominoes.length);
             displayShape();
             startBtn.style.backgroundColor = "red";
             startBtn.innerHTML = 'Пауза';
         }
 
-    });
+    }
 
     // add score
     function addScore() {
@@ -236,14 +269,16 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function showRules(){
+    function showRules() {
         Swal.fire({
             title: '<strong><u>Правила гри</u></strong>',
             icon: 'info',
             html:
-                'Для обертання  фігур використовується клавіша<img style="  width: 40px;height: 40px;" src="https://cdn-icons-png.flaticon.com/512/31/31838.png"><br>' +
-                'Для переміщення фігур по гральному полю використовуються клавіші<img style="  width: 40px;height: 40px;" src="https://cdn-icons-png.flaticon.com/512/31/31931.png"> для зміщення фігури вліво та' +
-                '<img style="  width: 40px;height: 40px;" src="https://cdn-icons-png.flaticon.com/512/30/30997.png"> для зміщення фігури вправо',
+                'Для обертання  фігур використовується клавіша <img style="  width: 40px;height: 40px;" src="https://cdn-icons-png.flaticon.com/512/31/31838.png"><br>' +
+                'Для переміщення фігур по гральному полю використовуються клавіші <img style="  width: 40px;height: 40px;" src="https://cdn-icons-png.flaticon.com/512/31/31931.png"> для зміщення фігури вліво та' +
+                ' <img style="  width: 40px;height: 40px;" src="https://cdn-icons-png.flaticon.com/512/30/30997.png"> для зміщення фігури вправо<br>' +
+                'Для швидшого опускання фігури використовується клавіша <img style="  width: 40px;height: 40px;" src="https://cdn-icons-png.flaticon.com/512/31/31945.png"><br>' +
+                'Також швидкість опускання фігури регулюється слайдером',
             showCloseButton: true,
             showCancelButton: true,
             focusConfirm: false
