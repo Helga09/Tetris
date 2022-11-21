@@ -3,11 +3,11 @@
 
 <head>
     <script src="app.js" charset="utf-8"></script>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css"></link>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.16/dist/sweetalert2.all.min.js"></script>
-    </link>
+    
     <title>Гра в тетріс</title>
-    </link>
+    <meta charset="utf-8">
 </head>
 
 <body>
@@ -22,9 +22,10 @@
     <div class="game">
         <h2>Бали:<span id="score">0</span></h2>
         <div class="slidecontainer">
-          <label>Швидкість руху фігур:</label>
+            <label>Швидкість руху фігур:</label>
             <input type="range" min="300" max="1500" value="1000" class="slider" id="speed">
         </div>
+
         <div class="container">
 
             <div class="grid">
@@ -258,15 +259,18 @@
                 <div></div>
                 <div></div>
             </div>
-
-
-
         </div>
         <div class="display">
             <button class="button" id="start-button">Грати</button>
+            <button class="button" style="display: none; background-color: #fcf526; color: green;"
+                id="startNewGame">Почати нову гру</button>
+        </div>
+        <div class="slidecontainer">
+            <label>Гучність музики:</label>
+            <input type="range" min="0" max="100" value="50" class="slider" id="volumeMusic">
         </div>
     </div>
-        <footer>
+    <footer>
         <p>Сайт створено за <a href="https://www.youtube.com/watch?v=rAUn1Lom6dw">цим відео</a></p>
     </footer>
     <audio controls autoplay loop>

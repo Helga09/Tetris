@@ -40,13 +40,14 @@ p {
     color: #fcf526;
 }
 
-label{
+label {
     text-align: center;
     font-family: 'Righteous', cursive;
     position: relative;
     color: #fcf526;
     font-size: 19px;
 }
+
 a:hover {
     color: #fcf526;
 }
@@ -102,6 +103,7 @@ a:hover {
     border: none;
     border-radius: 15px;
     box-shadow: 0 2px #999;
+    margin-top: 10px;
 }
 
 
@@ -117,7 +119,8 @@ audio {
 .display {
     margin: 1%;
     display: flex;
-    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }
 
 footer {

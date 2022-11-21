@@ -4,7 +4,11 @@ document.addEventListener('DOMContentLoaded', () => {
     let squares = Array.from(document.querySelectorAll('.grid div'));
     const scoreDisplay = document.querySelector('#score');
     const startBtn = document.querySelector("#start-button");
+    const startNewGameBtn = document.getElementById("startNewGame");
     var slider = document.getElementById("speed");
+    var volumeMusic = document.getElementById("volumeMusic");
+    const displaySquares = document.querySelectorAll('.mini-grid div');
+    document.querySelector('audio').pause();
     const width = 10;
     let nextRandom = 0;
     let currentRotation = 0;
@@ -59,11 +63,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const theTetrominoes = [lTetromino, zTetromino, tTetromino, oTetromino, iTetromino];
 
-    let currentPosition = 4;
+
+    var currentPosition = 4;
 
     // randomly select a Tetromino and its first rotation
-    let random = Math.floor(Math.random() * theTetrominoes.length);
-    let current = theTetrominoes[random][currentRotation];
+    var random = Math.floor(Math.random() * theTetrominoes.length);
+    var current = theTetrominoes[random][currentRotation];
 
     // draw the tetromino
     function draw() {
@@ -86,7 +91,9 @@ document.addEventListener('DOMContentLoaded', () => {
     function control(e) {
 
         if (e.keyCode === 37) {
-            moveLeft();
+            if (timerId) {
+                moveLeft();
+            }
         }
         else if (e.keyCode === 38) {
             if (timerId) {
@@ -94,7 +101,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
         else if (e.keyCode === 39) {
-            moveRigth();
+            if (timerId) {
+                moveRigth();
+            }
         }
         else if (e.keyCode === 40) {
             if (timerId) {
@@ -131,9 +140,9 @@ document.addEventListener('DOMContentLoaded', () => {
             nextRandom = Math.floor(Math.random() * theTetrominoes.length);
             current = theTetrominoes[random][currentRotation];
             currentPosition = 4;
+            addScore();
             draw();
             displayShape();
-            addScore();
             gameOver();
         }
     }
@@ -181,7 +190,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     //show up-next tetromino in mini-grid
-    const displaySquares = document.querySelectorAll('.mini-grid div');
+
     const displayWidth = 4;
     const displayIndex = 0;
 
@@ -208,6 +217,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
+
+    startNewGameBtn.addEventListener('click', startNewGame);
     // add funcrionality to the button
     startBtn.addEventListener('click', startGame);
 
@@ -216,6 +227,55 @@ document.addEventListener('DOMContentLoaded', () => {
             clearInterval(timerId);
             timerId = setInterval(moveDown, this.value);
         }
+    }
+
+    volumeMusic.oninput = function () {
+        document.querySelector('audio').play();
+        document.querySelector('audio').volume = (this.value / 100);
+    }
+
+    function startNewGame() {
+        document.querySelector('audio').pause();
+        startBtn.style.backgroundColor = "green";
+        startBtn.innerHTML = 'Грати';
+        startNewGameBtn.style.display = 'none';
+        window.removeEventListener("keydown", arrow_keys_handler, false);
+        clearInterval(timerId);
+        timerId = null;
+        score = 0;
+        scoreDisplay.innerHTML = 0;
+        
+
+        document.querySelector('audio').currentTime = 0;
+
+        current.forEach(index => {
+            squares[currentPosition + index].classList.remove('tetromino');
+            squares[currentPosition + index].style.backgroundColor = '';
+        })
+
+        for (let i = 0; i < 199; i += width) {
+            const row = [i, i + 1, i + 2, i + 3, i + 4, i + 5, i + 6, i + 7, i + 8, i + 9];
+            row.forEach(index => {
+                squares[index].classList.remove('taken');
+                squares[index].classList.remove('tetromino');
+                squares[index].style.backgroundColor = '';
+            })
+            const squaresRemoved = squares.splice(i, width);
+            squares = squaresRemoved.concat(squares);
+            squares.forEach(cell => grid.appendChild(cell));
+
+        }
+
+        undrow();
+        displaySquares.forEach(squares => {
+            squares.classList.remove('tetromino');
+            squares.style.backgroundColor = '';
+        })
+
+        random = nextRandom;
+        nextRandom = Math.floor(Math.random() * theTetrominoes.length);
+        current = theTetrominoes[random][currentRotation];
+        currentPosition = 4;
     }
 
     function startGame() {
@@ -228,6 +288,7 @@ document.addEventListener('DOMContentLoaded', () => {
             startBtn.innerHTML = 'Грати';
         }
         else {
+            startNewGameBtn.style.display = 'inline-block';
             window.addEventListener("keydown", arrow_keys_handler, false);
             document.querySelector('audio').play();
             draw();
@@ -265,6 +326,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (current.some(index => squares[currentPosition + index].classList.contains('taken'))) {
             scoreDisplay.innerHTML = 'кінець';
             clearInterval(timerId);
+            timerId = null;
             document.querySelector('audio').pause();
         }
     }
